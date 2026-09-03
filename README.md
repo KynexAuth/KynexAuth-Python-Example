@@ -14,17 +14,24 @@ Official, feature-complete Python implementation for the **[KynexAuth](https://k
 
 ```
 Py Example/
-├── 📁 ConsoleExample/
+├── 📁 ConsoleExample/     # Next-Gen Cyberpunk CLI Terminal Application
 │   ├── kynexauth.py       # Core Python SDK Client Library (Zero third-party dependencies)
 │   ├── main.py            # Cyberpunk-styled Console Loader application
 │   ├── build_exe.bat      # 1-Click Standalone .EXE Compiler (PyInstaller)
-│   └── requirements.txt   # Optional packaging dependencies
+│   └── requirements.txt   # Dependencies
 │
-├── 📁 GuiExample/
+├── 📁 GuiExample/         # 1:1 C# GunaUI2-styled Modern Dark Desktop GUI
 │   ├── kynexauth.py       # Core Python SDK Client Library
-│   ├── main.py            # 1:1 C# GunaUI2-styled Modern Dark GUI Loader & Dashboard
+│   ├── main.py            # Desktop GUI Loader & Dashboard
 │   ├── build_exe.bat      # 1-Click Standalone .EXE Compiler (PyInstaller)
-│   └── requirements.txt   # Optional packaging dependencies
+│   └── requirements.txt   # Dependencies
+│
+├── 📁 WebExample/         # Emerald Dark Cybernetic Web Application
+│   ├── kynexauth.py       # Core Python SDK Client Library
+│   ├── app.py             # Flask Web Server
+│   ├── templates/         # HTML5 Web UI Templates
+│   ├── start_web.bat      # 1-Click Web Application Launcher
+│   └── requirements.txt   # Flask dependencies
 │
 └── 📄 README.md           # Setup & Integration Documentation
 ```
