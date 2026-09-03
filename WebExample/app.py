@@ -16,9 +16,9 @@ app.secret_key = os.urandom(24)
 # CONFIGURE YOUR APPLICATION CREDENTIALS
 # -------------------------------------------------------------
 kynex_app = KynexAuth(
-    name="testerr",
-    owner_id="Z2zapMIjyB2nkw7ahr",
-    version="1.1",
+    name="your app",
+    owner_id="YOUR VERRSION",
+    version="YOUR VERSION",
     url="https://kynexauth.com/api/v1/client",
 )
 
