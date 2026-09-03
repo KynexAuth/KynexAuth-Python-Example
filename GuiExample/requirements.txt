@@ -1,0 +1,3 @@
+# KynexAuth GUI Loader Dependencies
+# Zero runtime dependencies required!
+pyinstaller>=6.0.0
