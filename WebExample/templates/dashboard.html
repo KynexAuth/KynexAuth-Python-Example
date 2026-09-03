@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · Python KynexAuth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060B0A;
+            --card-bg: rgba(10, 20, 18, 0.85);
+            --card-border: rgba(16, 185, 129, 0.35);
+            --emerald: #10B981;
+            --teal: #14B8A6;
+            --text-main: #F0FDF4;
+            --text-muted: #86EFAC;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(16, 185, 129, 0.18) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(20, 184, 166, 0.15) 0%, transparent 45%);
+            padding: 40px 20px;
+        }
+
+        .dashboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: 16px 26px;
+            border-radius: 16px;
+            margin-bottom: 28px;
+            backdrop-filter: blur(16px);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .brand-pill {
+            padding: 4px 10px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: var(--emerald);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            padding: 8px 18px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #FCA5A5;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            color: #FFFFFF;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(20, 184, 166, 0.1) 100%);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 28px;
+        }
+
+        .hero-title {
+            font-size: 30px;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+        }
+
+        .card-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #6EE7B7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .card-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #FFFFFF;
+            font-family: 'JetBrains Mono', monospace;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="navbar">
+        <div class="brand">
+            🐍 KynexAuth Python
+            <span class="brand-pill">SESSION VERIFIED</span>
+        </div>
+        <a href="/logout" class="logout-btn">Log Out ⎋</a>
+    </div>
+
+    <div class="hero-banner">
+        <h1 class="hero-title">Welcome back, {{ user.username }}! 👋</h1>
+        <p style="color: #A7F3D0; font-size: 14px;">Python Flask session active · Multi-point hardware lock confirmed.</p>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-header">Account Name</div>
+            <div class="card-value" style="color: var(--emerald);">{{ user.username }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Public IPv4 Node</div>
+            <div class="card-value" style="color: #FBBF24;">{{ user.ip }}</div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">Subscription Status</div>
+            <div class="card-value" style="color: var(--emerald);">
+                {% if user.subscriptions and user.subscriptions|length > 0 %}
+                    {{ user.subscriptions[0].name }} ({{ user.subscriptions[0].expiry }})
+                {% else %}
+                    VIP Active
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1;">
+            <div class="card-header">Hardware SID</div>
+            <div class="card-value" style="font-size: 14px; color: #CBD5E1;">
+                {{ user.hwid or 'Locked to Machine' }}
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

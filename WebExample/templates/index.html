@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KynexAuth · Python Web Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #060B0A;
+            --card-bg: rgba(10, 20, 18, 0.8);
+            --card-border: rgba(16, 185, 129, 0.3);
+            --emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.3);
+            --teal: #14B8A6;
+            --text-main: #F0FDF4;
+            --text-muted: #86EFAC;
+            --input-bg: rgba(5, 12, 10, 0.85);
+            --input-border: rgba(16, 185, 129, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 85%, rgba(20, 184, 166, 0.12) 0%, transparent 45%);
+            padding: 20px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 22px;
+            padding: 38px 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px var(--emerald-glow);
+            position: relative;
+        }
+
+        .auth-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--emerald), transparent);
+            box-shadow: 0 0 15px var(--emerald);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 14px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--emerald);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--emerald);
+            box-shadow: 0 0 10px var(--emerald);
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 900;
+            margin-bottom: 4px;
+            background: linear-gradient(135deg, #FFFFFF 20%, #A7F3D0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #6EE7B7;
+            opacity: 0.8;
+        }
+
+        .tabs-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            background: rgba(5, 12, 10, 0.7);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 4px;
+            margin-bottom: 22px;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            padding: 9px 4px;
+            border: none;
+            background: transparent;
+            color: #6EE7B7;
+            opacity: 0.7;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            background: var(--emerald);
+            color: #060B0A;
+            opacity: 1;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .tab-btn:hover:not(.active) {
+            opacity: 1;
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #A7F3D0;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--emerald);
+            box-shadow: 0 0 0 3px var(--emerald-glow);
+            background: rgba(8, 18, 15, 0.95);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px 20px;
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            border: none;
+            border-radius: 10px;
+            color: #060B0A;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            margin-top: 6px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 22px rgba(16, 185, 129, 0.5);
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #FCA5A5;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #86EFAC;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 11px;
+            color: #4B5563;
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="auth-card">
+    <div class="header">
+        <div class="badge">
+            <div class="dot"></div>
+            KYNEXAUTH · PYTHON FLASK PORTAL
+        </div>
+        <h1 class="title">Cloud Security Portal</h1>
+        <p class="subtitle">Protected Python Web Interface</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="tabs-nav">
+        <button type="button" class="tab-btn active" onclick="switchTab('login')">LOGIN</button>
+        <button type="button" class="tab-btn" onclick="switchTab('register')">REGISTER</button>
+        <button type="button" class="tab-btn" onclick="switchTab('license')">LICENSE</button>
+        <button type="button" class="tab-btn" onclick="switchTab('upgrade')">UPGRADE</button>
+    </div>
+
+    <!-- 1. LOGIN -->
+    <div id="tab-login" class="tab-pane active">
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="login">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-input" placeholder="Account username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="••••••••••••" required>
+            </div>
+            <button type="submit" class="submit-btn">Authorize Session →</button>
+        </form>
+    </div>
+
+    <!-- 2. REGISTER -->
+    <div id="tab-register" class="tab-pane">
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="register">
+            <div class="form-group">
+                <label class="form-label">Desired Username</label>
+                <input type="text" name="username" class="form-input" placeholder="Choose username" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-input" placeholder="Choose password" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">License Key</label>
+                <input type="text" name="license" class="form-input" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Email (Optional)</label>
+                <input type="email" name="email" class="form-input" placeholder="name@example.com">
+            </div>
+            <button type="submit" class="submit-btn">Create & Activate Account →</button>
+        </form>
+    </div>
+
+    <!-- 3. LICENSE -->
+    <div id="tab-license" class="tab-pane">
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="license">
+            <div class="form-group">
+                <label class="form-label">License Key</label>
+                <input type="text" name="license" class="form-input" placeholder="Paste license key" required>
+            </div>
+            <button type="submit" class="submit-btn">Fast Instant Login →</button>
+        </form>
+    </div>
+
+    <!-- 4. UPGRADE -->
+    <div id="tab-upgrade" class="tab-pane">
+        <form method="POST" action="/">
+            <input type="hidden" name="action" value="upgrade">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-input" placeholder="Account username to renew" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Renewal License Key</label>
+                <input type="text" name="license" class="form-input" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+            </div>
+            <button type="submit" class="submit-btn">Extend Duration →</button>
+        </form>
+    </div>
+
+    <div class="footer">
+        POWERED BY KYNEXAUTH CLOUD SECURITY
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.textContent.toLowerCase() === tabId);
+        if (btn) btn.classList.add('active');
+
+        const pane = document.getElementById('tab-' + tabId);
+        if (pane) pane.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
